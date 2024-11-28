@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Perguntas e Respostas</title>
+</head>
+<body>
+    <h1>Bem-vindo ao sistema de Perguntas e Respostas!</h1>
+    <form id="question-form">
+        <label for="question">Digite sua pergunta:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h3>Resposta da IA:</h3>
+    <p id="answer"></p>
+
+    <script>
+        // Envia a pergunta para a API
+        document.getElementById('question-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const question = document.getElementById('question').value;
+            fetch('/api/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('answer').textContent = data.answer || 'Desculpe, não consegui responder.';
+            })
+            .catch(error => {
+                document.getElementById('answer').textContent = 'Erro ao obter resposta.';
+            });
+        });
+    </script>
+</body>
+</html>
